@@ -1,0 +1,11 @@
+# ignore dot files and folder
+.*
+venv
+
+# except for .gitignore itself
+!.gitignore
+
+# ignore some well-known Python related folders
+__pycache__
+dist
+htmlcov
