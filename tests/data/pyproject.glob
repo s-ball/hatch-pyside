@@ -1,0 +1,5 @@
+[project]
+name="foo"
+
+[tool.hatch.build.hooks.pyside]
+folders = ["src/foo"]
