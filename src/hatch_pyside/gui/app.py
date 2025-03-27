@@ -4,6 +4,8 @@
 from PySide6.QtWidgets import QApplication, QMessageBox, QDialog
 
 from hatch_pyside.gui.ui_project_chooser_dlg import Ui_ProjectChooser
+
+from hatch_pyside.gui.mainwindow import MainWindow
 from .. import config
 
 
@@ -34,8 +36,10 @@ def main():
     else:
         folder = projects[0]
 
-    print(folder)
-    return 0
+    main_wnd = MainWindow(folder)
+    main_wnd.show()
+
+    return app.exec()
 
 class DialogChooser(QDialog, Ui_ProjectChooser):
     def __init__(self, projects):
