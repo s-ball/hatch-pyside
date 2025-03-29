@@ -31,8 +31,8 @@ class ConfigMockTest(unittest.TestCase):
     @patch(patch_str)
     @patch('builtins.open')
     def test_no_config(self, _op, load):
-        load.return_value = dict()
-        lst = config.get_project_folders()
+        load.return_value = {'project': {'name': 'foo'}}
+        _, lst = config.get_project_folders()
         self.assertIsNone(lst)
 
     @patch(patch_str)
@@ -40,18 +40,22 @@ class ConfigMockTest(unittest.TestCase):
     def test_hatch_global(self, _op, load):
         lst = ['src/foo']
         load.side_effect = [
-            dict(), {'build': {'hooks': {'pyside': {'folders': lst}}}}]
-        self.assertIs(lst, config.get_project_folders())
+            {'project': {'name': 'foo'}},
+            {'build': {'hooks': {'pyside': {'folders': lst}}},
+                     'project': {'name': 'foo'}}]
+        self.assertIs(lst, config.get_project_folders()[1])
 
     @patch(patch_str)
     @patch('builtins.open')
     def test_hatch_wheel(self, _op, load):
         lst = ['src/foo']
         load.side_effect = [
-            dict(),
+            {'project': {'name': 'foo'}},
             {'build':
-                 {'targets': {'wheel': {'hooks':{'pyside': {'folders': lst}}}}}}]
-        self.assertIs(lst, config.get_project_folders())
+                 {'targets': {'wheel': {'hooks':{'pyside': {'folders': lst}}}}},
+             'project': {'name': 'foo'}}
+        ]
+        self.assertIs(lst, config.get_project_folders()[1])
 
 
 class ConfigTempTest(unittest.TestCase):
@@ -68,11 +72,11 @@ class ConfigTempTest(unittest.TestCase):
     def test_hatch(self):
         shutil.copy(self.data_path / 'pyproject.empty', 'pyproject.toml')
         shutil.copy(self.data_path / 'hatch.wheel', 'hatch.toml')
-        self.assertEqual([ 'src/bar'], config.get_project_folders())
+        self.assertEqual([ 'src/bar'], config.get_project_folders()[1])
 
     def test_pyproj(self):
         shutil.copy(self.data_path / 'pyproject.glob', 'pyproject.toml')
-        self.assertEqual(['src/foo'], config.get_project_folders())
+        self.assertEqual(['src/foo'], config.get_project_folders()[1])
 
     def test_no_proj(self):
         with self.assertRaises(OSError):
@@ -80,7 +84,7 @@ class ConfigTempTest(unittest.TestCase):
 
     def test_no_config(self):
         shutil.copy(self.data_path / 'pyproject.empty', 'pyproject.toml')
-        self.assertIsNone(config.get_project_folders())
+        self.assertIsNone(config.get_project_folders()[1])
 
 if __name__ == '__main__':
     unittest.main()

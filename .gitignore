@@ -5,6 +5,9 @@ venv
 # except for .gitignore itself
 !.gitignore
 
+# ignore ui_*.py files Qt generated
+ui_*.py
+
 # default Gihub for Python
 # Byte-compiled / optimized / DLL files
 __pycache__/

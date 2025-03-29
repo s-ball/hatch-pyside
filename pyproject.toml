@@ -60,4 +60,4 @@ exclude_lines = [
 ]
 
 [tool.hatch.build.hooks.pyside]
-folders = ["src/hatch-pyside/gui"]
+folders = ["src/hatch_pyside/gui", "src/hatch_pyside"]

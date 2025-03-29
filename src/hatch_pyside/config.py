@@ -18,14 +18,19 @@ def get_values(cfg: dict[str, Any]) -> Optional[list[str]]:
         return cfg['build']['hooks']['pyside']['folders']
 
 
-def get_project_folders() -> Optional[list[str]]:
+def get_project_folders() -> tuple[str, Optional[list[str]]]:
     """ Extract hatch-pyside config from pyproject.toml or hatch.toml """
+    name = None
     try:
         with open('pyproject.toml', 'rb') as fd:
-            return get_values(tomllib.load(fd)['tool']['hatch'])
+            json = tomllib.load(fd)
+            name = json['project']['name']
+            return name, get_values(json['tool']['hatch'])
     except KeyError:
+        if name is None:
+            raise
         try:
             with open('hatch.toml', 'rb') as fd:
-                return get_values(tomllib.load(fd))
+                return name, get_values(tomllib.load(fd))
         except (OSError, KeyError):
-            return None
+            return name, None

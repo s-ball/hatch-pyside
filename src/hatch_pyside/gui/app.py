@@ -1,6 +1,8 @@
 #  SPDX-FileCopyrightText: 2025-present s-ball <s-ball@laposte.net>
 #  #
 #  SPDX-License-Identifier: MIT
+from typing import Optional
+
 from PySide6.QtWidgets import QApplication, QMessageBox, QDialog
 
 from hatch_pyside.gui.ui_project_chooser_dlg import Ui_ProjectChooser
@@ -12,13 +14,20 @@ from .. import config
 def main():
     app = QApplication()
     try:
-        projects = config.get_project_folders()
+        name, projects = config.get_project_folders()
     except OSError:
         QMessageBox(QMessageBox.Icon.Critical,
                     'Fatal',
                     'No pyproject.toml file found',
                     informativeText='The current working directory must '
                                     'contain a pyproject.toml file').exec()
+        return 2
+    except KeyError:
+        QMessageBox(QMessageBox.Icon.Critical,
+                    'Fatal',
+                    'pyproject.toml has no project name',
+                    informativeText="The pyproject.toml file must "
+                    "at least contain [project] name=...").exec()
         return 2
     if projects is None:
         QMessageBox(QMessageBox.Icon.Critical,
@@ -27,19 +36,24 @@ def main():
                     informativeText='hatch-pyside plugin must be configured in '
                                     'pyproject.toml or hatch.toml').exec()
         return 1
-    if len(projects) > 1:
-        dlg = DialogChooser(projects)
-        if dlg.exec() == 0:
-            print('Cancelled')
-            return 0
-        folder = dlg.projectList.selectedItems()[0].text()
-    else:
-        folder = projects[0]
 
-    main_wnd = MainWindow(folder)
+    folder = choose_project(projects)
+    if folder is None:
+        return 0
+
+    main_wnd = MainWindow(projects, folder, name)
     main_wnd.show()
 
     return app.exec()
+
+def choose_project(projects: list[str]) -> Optional[str]:
+    if len(projects) == 1:
+        return projects[0]
+    dlg = DialogChooser(projects)
+    if dlg.exec() == 0:
+        return None
+    return dlg.projectList.selectedItems()[0].text()
+
 
 class DialogChooser(QDialog, Ui_ProjectChooser):
     def __init__(self, projects):
