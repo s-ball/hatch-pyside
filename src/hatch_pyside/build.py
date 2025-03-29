@@ -9,12 +9,22 @@ __all__ = ['command', 'build', 'clean']
 command: list[str]
 
 
+def run(cmd, folder) -> None:
+    subprocess.run(command + [cmd, folder],
+                   stdin=subprocess.DEVNULL,
+                   capture_output=True,
+                   text=True,
+                   check=True,
+                   creationflags=subprocess.CREATE_NO_WINDOW,
+                   )
+
+
 def build(folder: str) -> None:
-    subprocess.run(command + ['build', folder])
+    run('build', folder)
 
 
 def clean(folder: str) -> None:
-    subprocess.run(command + ['clean', folder])
+    run('clean', folder)
 
 
 def _build_command() -> str:
@@ -23,7 +33,7 @@ def _build_command() -> str:
     if cmd is None:
         visited = set()
         for d in (sysconfig.get_path('scripts', scheme)
-                     for scheme in sysconfig.get_scheme_names()):
+                  for scheme in sysconfig.get_scheme_names()):
             if d in visited:
                 continue
             visited.add(d)

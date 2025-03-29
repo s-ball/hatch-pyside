@@ -8,7 +8,7 @@ from PySide6.QtWidgets import QApplication, QMessageBox, QDialog
 from hatch_pyside.gui.ui_project_chooser_dlg import Ui_ProjectChooser
 
 from hatch_pyside.gui.mainwindow import MainWindow
-from .. import config
+from hatch_pyside import config
 
 
 def main():
@@ -29,7 +29,7 @@ def main():
                     informativeText="The pyproject.toml file must "
                     "at least contain [project] name=...").exec()
         return 2
-    if projects is None:
+    if projects is None or len(projects) == 0:
         QMessageBox(QMessageBox.Icon.Critical,
                     'Fatal',
                     'No hatch-pyside configuration found',

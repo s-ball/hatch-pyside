@@ -47,6 +47,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def change_project(self):
         self.project = app.choose_project(self.projects)
         self.setWindowTitle(f"hatch-pyside - {self.project}")
+        self.reload()
 
     @Slot()
     def reload(self):
