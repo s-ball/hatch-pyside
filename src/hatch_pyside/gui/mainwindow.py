@@ -10,6 +10,7 @@ from PySide6.QtCore import Slot
 from PySide6.QtGui import QCloseEvent
 from PySide6.QtWidgets import QMainWindow, QApplication, QDialog, QMessageBox, QListWidget
 
+import hatch_pyside
 import hatch_pyside.gui.app as app
 from hatch_pyside import __version__
 from hatch_pyside.gui.ui_about import Ui_About
@@ -69,11 +70,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     @Slot()
     def build(self):
-        QMessageBox(QMessageBox.Icon.Information, "Action", "Build").exec()
+        hatch_pyside.build(self.project)
+        self.reload()
 
     @Slot()
     def clean(self):
-        QMessageBox(QMessageBox.Icon.Information, "Action", "Clean").exec()
+        hatch_pyside.clean(self.project)
+        self.reload()
 
     @Slot()
     def remove(self):
