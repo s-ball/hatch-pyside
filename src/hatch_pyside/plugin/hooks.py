@@ -4,7 +4,7 @@
 
 from hatchling.plugin import hookimpl
 
-from hatch_pyside.plugin import PysideBuildHook
+from .plugin import PysideBuildHook
 
 
 @hookimpl

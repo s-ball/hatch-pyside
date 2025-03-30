@@ -14,7 +14,8 @@ authors = [
   { name = "s-ball", email = "s-ball@laposte.net" },
 ]
 classifiers = [
-  "Development Status :: 2 - Pre-Alpha",
+  "Development Status :: 4 - Beta",
+  "Framework :: Hatch",
   "Programming Language :: Python",
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
@@ -31,7 +32,7 @@ Issues = "https://github.com/s-ball/hatch-pyside/issues"
 Source = "https://github.com/s-ball/hatch-pyside"
 
 [project.entry-points.hatch]
-pyside = "hatch-pyside.plugin.hooks"
+pyside = "hatch_pyside.plugin.hooks"
 
 [tool.hatch.version]
 path = "src/hatch_pyside/__about__.py"
@@ -64,6 +65,9 @@ exclude_lines = [
 
 [tool.hatch.build.targets.wheel]
 artifacts = ["ui*.py"]
+
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.13", "3.12", "3.11", "3.10", "3.9"]
 
 [project.gui-scripts]
 pyside-builder = "hatch_pyside.gui.app:main"
