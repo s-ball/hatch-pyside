@@ -30,6 +30,9 @@ Documentation = "https://github.com/s-ball/hatch-pyside#readme"
 Issues = "https://github.com/s-ball/hatch-pyside/issues"
 Source = "https://github.com/s-ball/hatch-pyside"
 
+[project.entry-points.hatch]
+pyside = "hatch-pyside.plugin.hooks"
+
 [tool.hatch.version]
 path = "src/hatch_pyside/__about__.py"
 
