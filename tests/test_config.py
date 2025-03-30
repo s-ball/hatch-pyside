@@ -75,7 +75,7 @@ class ConfigTempTest(unittest.TestCase):
         self.assertEqual([ 'src/bar'], config.get_project_folders()[1])
 
     def test_pyproj(self):
-        shutil.copy(self.data_path / 'pyproject.glob', 'pyproject.toml')
+        shutil.copy(self.data_path / 'pyproject.toml', 'pyproject.toml')
         self.assertEqual(['src/foo'], config.get_project_folders()[1])
 
     def test_no_proj(self):
