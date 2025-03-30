@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling", "hatch-pyside @ file:///C:/Users/serge/PycharmProjects/hatch-pyside"]
+requires = ["hatchling", "hatch-pyside"]
 build-backend = "hatchling.build"
 
 [project]

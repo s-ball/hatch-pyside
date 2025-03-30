@@ -1,6 +1,7 @@
 #  SPDX-FileCopyrightText: 2025-present s-ball <s-ball@laposte.net>
 #  #
 #  SPDX-License-Identifier: MIT
+"""The configuration of the application QMainWindow"""
 import json
 import os
 from pathlib import Path
@@ -24,11 +25,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     json_file: Optional[str] = None
 
     def __init__(self, projects: list[str], folder: str, name: str):
+        """
+        The main window for the GUI.
+
+        Args:
+            projects:   the list of the configured folders for the plugin
+            folder:     the only or selected folder
+            name:       the project name
+        """
         super().__init__()
         self.setupUi(self)
         self.projects = projects
         self.project = folder
         self.setWindowTitle(f"hatch-pyside - {folder}")
+        # do not suggest to change folder when there is only one...
         if len(projects) <= 1:
             self.action_Change_project_folder.setVisible(False)
         self.reload()
@@ -36,21 +46,27 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     @Slot()
     def about_qt(self):
+        """Displays information about the underlying Qt framework"""
         # noinspection PyUnresolvedReferences
         QApplication.instance().aboutQt()
 
     @Slot()
     def about(self):
+        """Displays the application version"""
         About().exec()
 
     @Slot()
     def change_project(self):
+        """Let the user choose a new project folder"""
         self.project = app.choose_project(self.projects)
         self.setWindowTitle(f"hatch-pyside - {self.project}")
         self.reload()
 
     @Slot()
     def reload(self):
+        """Reload the list of files in the folder and the content of the
+         pyproject file
+         """
         self.files = [f for f in os.listdir(self.project)
                       if os.path.isfile(os.path.join(self.project, f))]
         for f in self.files:
@@ -71,25 +87,29 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     @Slot()
     def build(self):
+        """Builds the dependant files from the Qt source ones"""
         hatch_pyside.build(self.project)
         self.reload()
 
     @Slot()
     def clean(self):
+        """Removes the dependant files"""
         hatch_pyside.clean(self.project)
         self.reload()
 
     @Slot()
     def remove(self):
+        """Removes the selected files from the .pyproject file"""
         self.dirty |= move_sel(self.project_files_widget, self.files_widget)
 
     @Slot()
     def add(self):
+        """Adds the selected files to the .pyproject file"""
         self.dirty |= move_sel(self.files_widget, self.project_files_widget)
 
     @Slot()
     def save(self):
-        print("Saving")
+        """Saves the .pyproject file"""
         self.project_files = sorted(
             [self.project_files_widget.item(row).text()
              for row in range(self.project_files_widget.count())])
@@ -103,6 +123,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.dirty = False
 
     def closeEvent(self, event: QCloseEvent):
+        # If the .pyproject has been change and not yet saved,
+        #  suggests to save it before terminating the application session
         if self.dirty:
             buttons = (QMessageBox.StandardButton.Save
                        | QMessageBox.StandardButton.Discard
@@ -120,6 +142,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
 
 def move_sel(src: QListWidget, dest: QListWidget) -> bool:
+    # move the selection from one source QListWidget to a destination one
     sel = src.selectedItems()
     if len(sel) == 0:
         return False
@@ -138,6 +161,7 @@ def clear_selection(list_widget: QListWidget) -> None:
 
 
 class About(QDialog, Ui_About):
+    """A QDialog to display the application version"""
     def __init__(self):
         super().__init__()
         self.setupUi(self)
