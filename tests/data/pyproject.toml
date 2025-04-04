@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling", "hatch-pyside"]
+requires = ["hatchling", "hatch-pyside == 0.5.1", "build"]
 build-backend = "hatchling.build"
 
 [project]
