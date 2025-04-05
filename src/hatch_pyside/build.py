@@ -7,18 +7,11 @@ or to remove them.
 
 command contains the full path of the first found pyside-project command.
 """
-import os
 import shutil
 import subprocess
 import sysconfig
 
 __all__ = ["command", "build", "clean"]
-
-from subprocess import CalledProcessError
-
-from typing import Any
-
-from hatchling.builders.hooks.plugin.interface import BuildHookInterface
 
 command: list[str]
 
@@ -92,11 +85,3 @@ def _build_command() -> str:
 # compute command at import time
 command = [_build_command()]
 
-# A custom plugin to build the GUI
-class CustomBuildHook(BuildHookInterface):
-
-    def clean(self, _versions: list[str]) -> None:
-        clean(os.path.join(self.root, 'src', 'hatch_pyside', 'gui'))
-
-    def initialize(self, version: str, build_data: dict[str, Any]) -> None:
-        build(os.path.join(self.root, 'src', 'hatch_pyside', 'gui'))
