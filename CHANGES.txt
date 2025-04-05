@@ -1,4 +1,6 @@
-0.5.2: Fix the generation of the wheel
+0.5.4: Add error messages
+
+0.5.3: Fix the generation of the wheel
 
 0.5.1: Ensure to use PySide 6.8
 

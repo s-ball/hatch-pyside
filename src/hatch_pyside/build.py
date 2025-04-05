@@ -16,7 +16,7 @@ __all__ = ["command", "build", "clean"]
 command: list[str]
 
 
-def run(cmd, folder) -> None:
+def run(cmd, folder) -> subprocess.CompletedProcess:
     """
     Pass the subcommand cmd to pyside6-project with the folder parameter
     Args:
@@ -26,7 +26,7 @@ def run(cmd, folder) -> None:
     Raises:
         CalledProcessError  if the pyside6-project command returns a non 0 exit code
     """
-    subprocess.run(
+    return subprocess.run(
         command + [cmd, folder],
         stdin=subprocess.DEVNULL,
         capture_output=True,
@@ -36,7 +36,7 @@ def run(cmd, folder) -> None:
     )
 
 
-def build(folder: str) -> None:
+def build(folder: str) -> subprocess.CompletedProcess:
     """
     Calls run to build the dependant files
     Args:
@@ -45,10 +45,10 @@ def build(folder: str) -> None:
     Raises:
         CalledProcessError  if the pyside6-project command returns a non 0 exit code
     """
-    run("build", folder)
+    return run("build", folder)
 
 
-def clean(folder: str) -> None:
+def clean(folder: str) -> subprocess.CompletedProcess:
     """
     Calls run to clean the dependant files
     Args:
@@ -57,7 +57,7 @@ def clean(folder: str) -> None:
     Raises:
         CalledProcessError  if the pyside6-project command returns a non 0 exit code
     """
-    run("clean", folder)
+    return run("clean", folder)
 
 
 def _build_command() -> str:

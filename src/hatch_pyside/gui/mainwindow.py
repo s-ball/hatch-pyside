@@ -5,6 +5,7 @@
 import json
 import os
 from pathlib import Path
+from subprocess import CalledProcessError
 from typing import Optional
 
 from PySide6.QtCore import Slot
@@ -88,13 +89,26 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     @Slot()
     def build(self):
         """Builds the dependant files from the Qt source ones"""
-        hatch_pyside.build(self.project)
+        try:
+            hatch_pyside.build(self.project)
+        except CalledProcessError as e:
+            QMessageBox(QMessageBox.Icon.Critical,
+                        "Build error",
+                        f'Command returned {e.returncode}',
+                        informativeText=e.stderr).exec()
+
         self.reload()
 
     @Slot()
     def clean(self):
         """Removes the dependant files"""
-        hatch_pyside.clean(self.project)
+        try:
+            hatch_pyside.clean(self.project)
+        except CalledProcessError as e:
+            QMessageBox(QMessageBox.Icon.Warning,
+                        "Clean error",
+                        f'Command returned {e.returncode}',
+                        informativeText=e.stderr).exec()
         self.reload()
 
     @Slot()

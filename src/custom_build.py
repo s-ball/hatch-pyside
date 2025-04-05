@@ -3,18 +3,28 @@
 #  SPDX-License-Identifier: MIT
 import os
 import sys
+from subprocess import CalledProcessError
 from typing import Any
 
 from hatchling.builders.hooks.plugin.interface import BuildHookInterface
 
 sys.path.append(os.path.dirname(__file__))
 from hatch_pyside.build import build, clean
+from hatch_pyside.plugin.plugin import dump
+
 
 # A custom plugin to build the GUI
 class CustomBuildHook(BuildHookInterface):
 
     def clean(self, _versions: list[str]) -> None:
-        clean(os.path.join(self.root, 'src', 'hatch_pyside', 'gui'))
+        try:
+            clean(os.path.join(self.root, 'src', 'hatch_pyside', 'gui'))
+        except CalledProcessError as e:
+            dump(e, self.app)
 
     def initialize(self, version: str, build_data: dict[str, Any]) -> None:
-        build(os.path.join(self.root, 'src', 'hatch_pyside', 'gui'))
+        try:
+            build(os.path.join(self.root, 'src', 'hatch_pyside', 'gui'))
+        except CalledProcessError as e:
+            dump(e, self.app)
+            self.app.abort('Fatal', e.returncode)
