@@ -13,6 +13,7 @@
     * [Plugin](#plugin)
     * [GUI](#gui)
     * [Developer](#developer)
+  * [Compatibility](#compatibility)
   * [Contributing](#contributing)
   * [License](#license)
 ## Goal
@@ -21,7 +22,8 @@ This is a hatch plugin able to automatically build the required Python files
 from their associated Qt source file. For example, it will build a
 `ui_MainWindow.py` file from a `MainWindow.ui` one.
 
-Additionally, it installs a GUI tool to manage the `proj_name.pyproject` file
+Additionally, it installs `pyside-build`, a GUI tool to manage the
+`proj_name.pyproject` file
 that is used by `pyside6-project` (which is internally called by
 `hatch-pyside`).
 
@@ -29,6 +31,9 @@ that is used by `pyside6-project` (which is internally called by
 
 The plugin and the GUI are currently beta quality. They still lack real world
 tests and a decent documentation.
+
+Starting with the 0.5.4 version, the plugin provides explanatory messages if 
+the underlying `pyside6-project` command fails.
 
 ## Installation
 
@@ -62,7 +67,7 @@ folders = ["src/foo"]
 ### GUI
 
 If you install the package in your environment, you will gain access to the
-`hatch-pyside` GUI tool. It uses the plugin configuration to know what are the
+`pyside-builder` GUI tool. It uses the plugin configuration to know what are the
 directories of interest, and allow you to easily populate a `.pyproject` file
 
 ### Developer
@@ -73,6 +78,13 @@ from PyPI, or better clone the GitHub repository:
 ```commandline
 git clone https://github.com/s-ball/hatch-pyside.git
 ```
+
+## Compatibility
+
+`hatch-pyside` works fine with `PySide6` in versions 6.8.x . In the new 6.9,
+`pyside6-project` has a dependency on `tomlkit` which is not correctly 
+handled by the `pip` dependencies machinery. For that reason, the current 
+version of `hatch-pyside` requires a version 6.8.x of `PySide6`.
 
 ## Contributing
 
