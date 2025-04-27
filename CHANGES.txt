@@ -1,3 +1,5 @@
+0.5.5: Fix a stupid error on non Windows systems
+
 0.5.4: Add error messages
 
 0.5.3: Fix the generation of the wheel

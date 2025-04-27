@@ -16,6 +16,11 @@ __all__ = ["command", "build", "clean"]
 command: list[str]
 
 
+try:
+    _creation_flags = subprocess.CREATE_NO_WINDOW
+except AttributeError:
+    _creation_flags = 0
+
 def run(cmd, folder) -> subprocess.CompletedProcess:
     """
     Pass the subcommand cmd to pyside6-project with the folder parameter
@@ -32,7 +37,7 @@ def run(cmd, folder) -> subprocess.CompletedProcess:
         capture_output=True,
         text=True,
         check=True,
-        creationflags=subprocess.CREATE_NO_WINDOW,
+        creationflags=_creation_flags,
     )
 
 
