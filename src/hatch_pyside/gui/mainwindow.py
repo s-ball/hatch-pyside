@@ -154,6 +154,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 self.save()
         event.accept()
 
+    @Slot()
+    def lupdate(self):
+        """Updates the translation files (*.ts)"""
+
 
 def move_sel(src: QListWidget, dest: QListWidget) -> bool:
     # move the selection from one source QListWidget to a destination one

@@ -25,7 +25,7 @@ def run(cmd, folder) -> subprocess.CompletedProcess:
     """
     Pass the subcommand cmd to pyside6-project with the folder parameter
     Args:
-        cmd:    the subcommand to execute (should be clean or build)
+        cmd:    the subcommand to execute (should be clean, lupdate or build)
         folder: the folder containing the .pyproject file
 
     Raises:
@@ -63,6 +63,18 @@ def clean(folder: str) -> subprocess.CompletedProcess:
         CalledProcessError  if the pyside6-project command returns a non 0 exit code
     """
     return run("clean", folder)
+
+
+def lupdate(folder: str) -> subprocess.CompletedProcess:
+    """
+    Calls run to update the translation files
+    Args:
+        folder:  the folder containing the .pyproject file
+
+    Raises:
+        CalledProcessError  if the pyside6-project command returns a non 0 exit code
+    """
+    return run("lupdate", folder)
 
 
 def _build_command() -> str:
